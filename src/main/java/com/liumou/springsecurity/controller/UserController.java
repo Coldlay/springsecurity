@@ -5,6 +5,7 @@ import com.liumou.springsecurity.domain.User;
 import com.liumou.springsecurity.domain.vo.UserVO;
 import com.liumou.springsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,7 +21,6 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseResult login(@RequestBody User user){
-
         return userService.login(user);
     }
 
@@ -32,5 +32,11 @@ public class UserController {
     @GetMapping("/logout")
     public ResponseResult logout(){
        return  userService.logout();
+    }
+
+    @PreAuthorize("hasAuthority('user:see')")
+    @GetMapping("/getUsers")
+    public ResponseResult getUsers(){
+        return userService.getUsers();
     }
 }

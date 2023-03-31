@@ -14,4 +14,5 @@ public interface UserService extends IService<User>{
 
     ResponseResult logout();
 
+    ResponseResult getUsers();
 }

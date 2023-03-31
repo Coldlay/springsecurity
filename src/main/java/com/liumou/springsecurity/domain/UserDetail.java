@@ -4,25 +4,41 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author coldplay
  * @create 2023-03-30 21:06
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class UserDetail implements UserDetails {
 
     private User user;
 
 
+    private List<String> permissions;
+
+
+    private List<GrantedAuthority> authorities;
+
+    public UserDetail(User user,List<String> permissions){
+        this.user = user;
+        this.permissions = permissions;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        if(authorities != null) return authorities;
+        authorities = permissions
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+        return authorities;
     }
 
     @Override

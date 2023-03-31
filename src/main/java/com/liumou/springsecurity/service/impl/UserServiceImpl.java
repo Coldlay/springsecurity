@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -64,6 +65,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
 
         return new ResponseResult(200,"退出成功");
+    }
+
+    @Override
+    public ResponseResult getUsers() {
+        List<User> users = userMapper.selectList(null);
+
+        return new ResponseResult(200,"获取成功",users);
     }
 
 

@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -62,10 +63,11 @@ public class LoginFilter extends OncePerRequestFilter {
         //走到这一步代表确实存在该用户，此时只需要将查到的用户存入上下文对象中就可
         //因为用户信息在springSecurity中是以UserDetails存在，所以先将其封装成UserDetails的实现类对象UserDetail
         //接着再将其封装成Authentication对象。
-        //TODO  少了权限信息
-        UserDetail userDetail = new UserDetail(user);
+        //
+
+        UserDetail userDetail = new UserDetail(user,userMapper.getPermissions(user.getId()));
         UsernamePasswordAuthenticationToken authenticationToken = new
-                UsernamePasswordAuthenticationToken(userDetail,null,null);
+                UsernamePasswordAuthenticationToken(userDetail,userDetail.getPassword(),userDetail.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         filterChain.doFilter(request,response);
